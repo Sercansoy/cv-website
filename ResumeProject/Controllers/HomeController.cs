@@ -11,6 +11,7 @@ namespace ResumeProject.Controllers
     public class HomeController : Controller
     {
         Context db = new Context();
+        private const int MaxMessagesPerHour = 3;
         // GET: Home
         public ActionResult Index()
         {
@@ -55,12 +56,44 @@ namespace ResumeProject.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public PartialViewResult contactTest(Message message)
+        public ActionResult SendMessage(Message message)
         {
-            message.Date = DateTime.Parse(DateTime.Now.ToShortDateString());
+            string back = Url.Action("Index", "Home") + "#contact";
+
+            if (!string.IsNullOrEmpty(Request.Form["Website"]))
+            {
+                TempData["FormSuccess"] = "Thank you! Your message has been sent.";
+                return Redirect(back);
+            }
+
+            // mesaj atma süresi: aynı ip'den saat başına max mesaj sayısı
+            string key = "contact:" + Request.UserHostAddress;
+            object cached = HttpRuntime.Cache[key];
+            int sent = cached is int ? (int)cached : 0;
+
+            if (sent >= MaxMessagesPerHour)
+            {
+                TempData["FormError"] = "Too many messages. Please try again later.";
+                return Redirect(back);
+            }
+
+            // doğrulama
+            ModelState.Remove("Date");
+            if (!ModelState.IsValid)
+            {
+                TempData["FormError"] = "Please check the form and try again.";
+                return Redirect(back);
+            }
+
+            message.Date = DateTime.Today;
             db.Messages.Add(message);
             db.SaveChanges();
-            return PartialView();
+
+            HttpRuntime.Cache.Insert(key, sent + 1, null,
+                DateTime.UtcNow.AddHours(1), System.Web.Caching.Cache.NoSlidingExpiration);
+
+            TempData["FormSuccess"] = "Thank you! Your message has been sent.";
+            return Redirect(back);
         }
 
     }

@@ -28,7 +28,7 @@ namespace ResumeProject.Models
         public string Subject { get; set; }
 
         [Column(TypeName = "varchar")]
-        [StringLength(1000, ErrorMessage ="Message cannot exceed 100 characters")]
+        [StringLength(1000, ErrorMessage ="Message cannot exceed 1000 characters")]
         [Required(ErrorMessage = "Message field cannot be empty.")]
         public string Messages { get; set; }
 

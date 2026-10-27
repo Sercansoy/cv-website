@@ -91,6 +91,26 @@
     color: #b0362b;
     display: block;
   }
+   .char-counter {
+        text-align: right;
+        font-size: 12px;
+        color: #8a8a8a;
+        margin-top: 6px;
+   }
+
+   .char-warning {
+        display: none;
+        margin-top: 6px;
+        font-size: 13px;
+        color: #b0362b;
+   }
+   .hp-field {
+        position: absolute;
+        left: -9999px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+   }
 
   @@media (max-width: 600px) {
     .contact-form-wrapper .row-2 {
@@ -102,7 +122,6 @@
 
 <div class="contact-form-wrapper">
 
-    @* If you return a message from the controller via TempData, it will show up here *@
     @if (TempData["FormSuccess"] != null)
     {
         <div class="form-status success">@TempData["FormSuccess"]</div>
@@ -112,30 +131,67 @@
         <div class="form-status error">@TempData["FormError"]</div>
     }
 
-    <form method="post">
+    @using (Html.BeginForm("SendMessage", "Home", FormMethod.Post))
+    {
         @Html.AntiForgeryToken()
+
+        <div class="hp-field" aria-hidden="true">
+            <label for="Website">Website</label>
+            <input type="text" name="Website" id="Website" tabindex="-1" autocomplete="off">
+        </div>
 
         <div class="row-2">
             <div class="form-group">
                 <label for="Name">Full Name</label>
-                <input type="text" name="Name" id="Name" placeholder="Your full name" required>
+                <input type="text" name="Name" id="Name" placeholder="Your full name" maxlength="100" required>
             </div>
             <div class="form-group">
                 <label for="Email">Email</label>
-                <input type="email" name="Email" id="Email" placeholder="you@example.com" required>
+                <input type="email" name="Email" id="Email" placeholder="you@example.com" maxlength="100" required>
             </div>
         </div>
 
         <div class="form-group">
             <label for="Subject">Subject</label>
-            <input type="text" name="Subject" id="Subject" placeholder="Message subject" required>
+            <input type="text" name="Subject" id="Subject" placeholder="Message subject" maxlength="100" required>
         </div>
 
         <div class="form-group">
             <label for="Messages">Message</label>
             <textarea name="Messages" id="Messages" placeholder="Write your message here..." required></textarea>
+            <div class="char-counter"><span id="charCount">0</span> / 1000</div>
+            <div class="char-warning" id="charWarning">Character limit reached. Any extra text was not added.</div>
         </div>
 
         <button type="submit">Send Message</button>
-    </form>
+    }
+    <script>
+        (function () {
+            var area = document.getElementById("Messages");
+            var count = document.getElementById("charCount");
+            var warn = document.getElementById("charWarning");
+            var LIMIT = 1000;
+
+            function used(text) {
+                // Karakter Sayısı Hesaplama (CRLF)
+                return text.replace(/\r?\n/g, "\r\n").length;
+            }
+
+            function update() {
+                var text = area.value.slice(0, LIMIT);
+                while (used(text) > LIMIT) {
+                    text = text.slice(0, -1);
+                }
+                if (text !== area.value) {
+                    area.value = text;
+                }
+                var total = used(text);
+                count.textContent = total;
+                warn.style.display = total >= LIMIT ? "block" : "none";
+            }
+
+            area.addEventListener("input", update);
+            update();
+        })();
+    </script>
 </div>
