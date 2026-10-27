@@ -1,0 +1,113 @@
+﻿@using ResumeProject.Models
+@model Experience
+
+@{
+    ViewBag.Title = "Create Experience";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .form-card {
+        max-width: 700px;
+        margin: 30px auto;
+        padding: 30px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+    }
+
+        .form-card h2 {
+            margin: 0 0 20px;
+            font-size: 22px;
+            color: #1e293b;
+        }
+
+        .form-card .group {
+            margin-bottom: 16px;
+        }
+
+        .form-card label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-card .field {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #dbe1e8;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+            .form-card .field:focus {
+                border-color: #2563eb;
+                outline: none;
+            }
+
+        .form-card textarea.field {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+    .field-validation-error {
+        color: #dc2626;
+        font-size: 12px;
+    }
+
+    .btn-save {
+        background: #2563eb;
+        color: #fff;
+        border: 0;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+        .btn-save:hover {
+            background: #1d4ed8;
+        }
+
+    .btn-back {
+        margin-left: 10px;
+        color: #64748b;
+        text-decoration: none;
+    }
+</style>
+
+<div class="form-card">
+    <h2>Add Experience</h2>
+
+    @using (Html.BeginForm("CreateExperience", "Experience", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="group">
+            <label>Job Title</label>
+            @Html.TextBoxFor(x => x.Title, new { @class = "field", placeholder = "e.g. Junior Software Developer" })
+            @Html.ValidationMessageFor(x => x.Title)
+        </div>
+
+        <div class="group">
+            <label>Company</label>
+            @Html.TextBoxFor(x => x.Company, new { @class = "field", placeholder = "e.g. Personal Projects" })
+            @Html.ValidationMessageFor(x => x.Company)
+        </div>
+
+        <div class="group">
+            <label>Date</label>
+            @Html.TextBoxFor(x => x.Date, new { @class = "field", placeholder = "e.g. 2026 - Present" })
+            @Html.ValidationMessageFor(x => x.Date)
+        </div>
+
+        <div class="group">
+            <label>Description</label>
+            @Html.TextAreaFor(x => x.Description, new { @class = "field", placeholder = "Responsibilities, projects, achievements..." })
+            @Html.ValidationMessageFor(x => x.Description)
+        </div>
+
+        <button type="submit" class="btn-save">Save</button>
+        <a href="@Url.Action("Index", "Experience")" class="btn-back">Back</a>
+    }
+</div>

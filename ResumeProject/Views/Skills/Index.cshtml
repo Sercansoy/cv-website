@@ -1,0 +1,101 @@
+﻿@using ResumeProject.Models
+@model List<Skills>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-tools mr-2"></i>
+                            My Skills
+                        </h3>
+
+                        <a href="/Skills/AddSkill" class="btn btn-success btn-sm ml-auto">
+                            <i class="fas fa-plus mr-2"></i>
+                            New Skill
+                        </a>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px">#</th>
+                                    <th>Skill</th>
+                                    <th style="width: 110px">Status</th>
+                                    <th style="width: 30%">Progress</th>
+                                    <th style="width: 90px">Percentage</th>
+                                    <th style="width: 150px">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var x in Model)
+                                {
+                                    string color;
+                                    if (x.Progress < 30)
+                                    {
+                                        color = "danger";
+                                    }
+                                    else if (x.Progress < 50)
+                                    {
+                                        color = "warning";
+                                    }
+                                    else if (x.Progress < 80)
+                                    {
+                                        color = "info";
+                                    }
+                                    else
+                                    {
+                                        color = "success";
+                                    }
+                                    <tr>
+                                        <td>@x.ID</td>
+                                        <td>@x.Skill</td>
+                                        <td>
+                                            @if (x.IsLearning)
+                                            {
+                                                <span class="badge badge-warning">Learning</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-success">Known</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="progress progress-xs">
+                                                <div class="progress-bar bg-@color" style="width: @x.Progress%"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-@color">@x.Progress%</span></td>
+                                        <td>
+                                            <a href="/Skills/EditSkill/@x.ID" class="btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i> Edit</a>
+                                            @using (Html.BeginForm("DeleteSkill", "Skills", new { id = x.ID }, FormMethod.Post,
+                                                    new { @class = "d-inline", onsubmit = "return confirm('Delete this Skill?');" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->

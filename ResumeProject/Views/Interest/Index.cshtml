@@ -1,0 +1,35 @@
+﻿@using ResumeProject.Models
+@model Interest
+@{
+    ViewBag.Title = "Edit Interests";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid p-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h3 font-weight-bold text-dark mb-1">Interest</h2>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    @using (Html.BeginForm("Index", "Interest", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label for="Title" class="font-weight-bold">Title</label>
+            <input type="text" id="Title" name="Title" class="form-control" value="@Model.Title" />
+        </div>
+
+        <div class="form-group">
+            <label for="Description" class="font-weight-bold">Description</label>
+            <textarea id="Description" name="Description" class="form-control" rows="6">@Model.Description</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success">Update</button>
+    }
+</div>

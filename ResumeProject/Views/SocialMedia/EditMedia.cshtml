@@ -1,0 +1,56 @@
+﻿@using ResumeProject.Models
+@model Social_media
+@{
+    ViewBag.Title = "EditMedia";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container my-4" style="max-width: 600px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <h4 class="mb-3 font-weight-bold text-dark">Edit Social Media Acount</h4>
+            <hr class="mb-4" />
+
+            @using (Html.BeginForm("EditMedia", "SocialMedia", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(x => x.ID)
+
+
+                <div class="form-group mb-3">
+                    <label class="form-label font-weight-semibold">Name</label>
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "e.g. Instagram" })
+                    @Html.ValidationMessageFor(x => x.Name, "", new { @class = "text-danger small mt-1 d-block" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label font-weight-semibold">Link</label>
+                    @Html.TextBoxFor(x => x.Link, new { @class = "form-control", placeholder = "e.g. https://www.linkedin.com/in/username" })
+                    @Html.ValidationMessageFor(x => x.Link, "", new { @class = "text-danger small mt-1 d-block" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label font-weight-semibold">Icon</label>
+                    @Html.TextBoxFor(x => x.Icon, new { @class = "form-control", placeholder = "e.g. fab fa-github, fab fa-instagram" })
+                    @Html.ValidationMessageFor(x => x.Icon, "", new { @class = "text-danger small mt-1 d-block" })
+                </div>
+
+                <div class="form-check form-switch mb-3">
+                    @Html.CheckBoxFor(x => x.Status, new { @class = "form-check-input", id = "status" })
+                    <label class="form-check-label" for="status">Active (show on website)</label>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="/SocialMedia/Index" class="btn btn-outline-secondary px-4">Back</a>
+                    <button type="submit" class="btn btn-primary px-4">Save Media</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+
+

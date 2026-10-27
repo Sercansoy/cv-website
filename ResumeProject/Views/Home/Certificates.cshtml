@@ -1,0 +1,15 @@
+﻿@using ResumeProject.Models
+@model List<Certificate>
+
+<div class="resume-section-content">
+    <h2 class="mb-5">Certifications</h2>
+    @foreach (var x in Model)
+    {
+        <ul class="fa-ul mb-0">
+            <li>
+                <span class="fa-li"><i class="fas fa-trophy text-warning"></i></span>
+                @x.Description
+            </li>
+        </ul>
+    }
+</div>

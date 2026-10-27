@@ -1,0 +1,51 @@
+﻿@using ResumeProject.Models
+@model List<Skills>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+
+@{
+    var known = Model.Where(x => !x.IsLearning).ToList();
+    var learning = Model.Where(x => x.IsLearning).ToList();
+}
+
+<div class="resume-section-content">
+    <h2 class="mb-5">Skills</h2>
+
+    <div class="subheading mb-3">Programming Languages & Tools</div>
+    <ul class="list-inline dev-icons">
+        @foreach (var x in known.Where(s => !string.IsNullOrEmpty(s.Icon)))
+        {
+            foreach (var icon in x.Icon.Split(','))
+            {
+                <li class="list-inline-item"><i class="@icon.Trim()"></i></li>
+            }
+        }
+    </ul>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="subheading mb-3">Technical Skills</div>
+            <ul class="fa-ul mb-0">
+                @foreach (var x in known)
+                {
+                    <li>
+                        <span class="fa-li"><i class="fas fa-check"></i></span>
+                        @x.Skill
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <div class="col-md-6">
+            <div class="subheading mb-3">Currently Learning</div>
+            <ul class="fa-ul mb-0">
+                @foreach (var x in learning)
+                {
+                    <li>
+                        <span class="fa-li"><i class="fas fa-book-open"></i></span>
+                        @x.Skill
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

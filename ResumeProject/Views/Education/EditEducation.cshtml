@@ -1,0 +1,142 @@
+﻿@using ResumeProject.Models
+@model Education
+
+@{
+    ViewBag.Title = "EditEducation";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container my-4" style="max-width: 600px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <h4 class="mb-3 font-weight-bold text-dark">Edit Education</h4>
+            <hr class="mb-4" />
+
+            @using (Html.BeginForm("EditEducation", "Education", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(x=>x.EducationID)
+
+                <!-- Title -->
+                <div class="form-group mb-3">
+                    <label class="form-label font-weight-semibold">Title</label>
+                    @Html.TextBoxFor(x => x.Title, new { @class = "form-control", placeholder = "e.g. Okan Üni" })
+                    @Html.ValidationMessageFor(x => x.Title, "", new { @class = "text-danger small mt-1 d-block" })
+                </div>
+
+                <!-- Subtitle -->
+                <div class="form-group mb-3">
+                    <label class="form-label font-weight-semibold">Subtitle</label>
+                    @Html.TextBoxFor(x => x.SubTitle, new { @class = "form-control", placeholder = "e.g. High School" })
+                    @Html.ValidationMessageFor(x => x.SubTitle, "", new { @class = "text-danger small mt-1 d-block" })
+                </div>
+
+                <!-- Date -->
+                <div class="form-group mb-3">
+                    <label class="form-label font-weight-semibold">Date</label>
+
+                    @Html.HiddenFor(x => x.Date)
+
+                    <div class="form-row">
+                        <div class="col-md-6 mb-2">
+                            <small class="text-muted">Start</small>
+                            <input type="month" id="StartDate" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <small class="text-muted">End</small>
+                            <input type="month" id="EndDate" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mt-1">
+                        <input type="checkbox" class="custom-control-input" id="IsOngoing" />
+                        <label class="custom-control-label" for="IsOngoing">I'm still studying here</label>
+                    </div>
+
+                    <span id="dateError" class="text-danger small mt-1 d-block"></span>
+                    @Html.ValidationMessageFor(x => x.Date, "", new { @class = "text-danger small mt-1 d-block" })
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="/Education/Index" class="btn btn-outline-secondary px-4">Back</a>
+                    <button type="submit" class="btn btn-primary px-4">Save Education</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var start = document.getElementById("StartDate");
+        var end = document.getElementById("EndDate");
+        var ongoing = document.getElementById("IsOngoing");
+        var hidden = document.getElementById("Date");
+        var error = document.getElementById("dateError");
+        var form = start.closest("form");
+
+        // "2021-10" -> "October 2021"
+        function format(value) {
+            var p = value.split("-");
+            return new Date(p[0], p[1] - 1, 1)
+                .toLocaleString("en-US", { month: "long", year: "numeric" });
+        }
+
+        var months = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+
+        function toMonthValue(text) {
+            var p = text.trim().split(" ");
+            var m = months.indexOf(p[0]) + 1;
+            if (m < 1 || !p[1]) return "";
+            return p[1] + "-" + (m < 10 ? "0" + m : m);
+        }
+
+        if (hidden.value) {
+            var parts = hidden.value.split(" - ");
+            start.value = toMonthValue(parts[0]);
+
+            if (parts[1] && parts[1].trim() === "Present") {
+                ongoing.checked = true;
+                end.disabled = true;
+            } else if (parts[1]) {
+                end.value = toMonthValue(parts[1]);
+            }
+        }
+
+        // "Still studying" seçilince bitiş alanını kapat
+        ongoing.addEventListener("change", function () {
+            end.disabled = ongoing.checked;
+            if (ongoing.checked) end.value = "";
+        });
+
+        form.addEventListener("submit", function (e) {
+            error.textContent = "";
+
+            if (!start.value) {
+                error.textContent = "Please select a start date.";
+                e.preventDefault();
+                return;
+            }
+
+            if (!ongoing.checked) {
+                if (!end.value) {
+                    error.textContent = "Please select an end date or check 'still studying'.";
+                    e.preventDefault();
+                    return;
+                }
+                if (end.value < start.value) {
+                    error.textContent = "End date cannot be earlier than the start date.";
+                    e.preventDefault();
+                    return;
+                }
+            }
+
+            var endText = ongoing.checked ? "Present" : format(end.value);
+            hidden.value = format(start.value) + " - " + endText;
+        });
+    });
+</script>
+

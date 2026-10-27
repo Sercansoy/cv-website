@@ -1,0 +1,105 @@
+﻿@using ResumeProject.Models
+@model Certificate
+@{
+    ViewBag.Title = "CreateCertificate";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .card-certificate {
+        max-width: 900px;
+        width: 100%;
+        margin: 40px auto;
+        padding: 32px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 24px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.875rem;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        border: 1px solid transparent;
+    }
+
+    .btn-primary {
+        background: #2563eb;
+        color: #fff;
+    }
+
+    .btn-secondary {
+        border-color: #cbd5e1;
+        color: #475569;
+        background: #fff;
+    }
+
+    .field-validation-error {
+        color: #dc2626;
+        font-size: 0.8rem;
+        margin-top: 4px;
+        display: block;
+    }
+</style>
+
+<div class="card-certificate">
+    <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 1.15rem; color: #0f172a;">Create Certificate</h3>
+
+    @using (Html.BeginForm("CreateCertificate", "Certificate", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label for="CertificateDescription">Description</label>
+            @Html.TextAreaFor(x => x.Description, new { @class = "form-control", rows = "4", placeholder = "Enter certificate details...", id = "CertificateDescription" })
+            @Html.ValidationMessageFor(x => x.Description)
+        </div>
+
+        <div class="form-group">
+            <label for="CertificateDate">Date</label>
+            @Html.TextBoxFor(x => x.Date, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", id = "CertificateDate" })
+            @Html.ValidationMessageFor(x => x.Date)
+        </div>
+
+        <div class="form-actions">
+            <a href="/Certificate/Index/" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    }
+</div>
+
