@@ -10,6 +10,7 @@ A dynamic personal resume (CV) website built with **ASP.NET MVC 5**, **Entity Fr
 - Single-page resume layout with About, Experience, Education, Skills, Interests, Certificates and Contact sections
 - Skills section with technology icons and a separate **"Currently Learning"** column, both driven by the database
 - Social media links that can be switched on or off from the admin panel
+- Downloadable CV (PDF) button next to the social links
 - Contact form that stores visitor messages in the database
 - Custom 404 and error pages
 
@@ -28,6 +29,7 @@ Security was a deliberate focus of this project:
 - **Password hashing** with BCrypt (BCrypt.Net-Next), no plain-text passwords
 - **Brute-force protection**: login is locked for 15 minutes after 5 failed attempts (per IP and username)
 - **CSRF protection**: `[ValidateAntiForgeryToken]` on all POST actions, with a token in every form
+- **Contact form spam protection**: a hidden honeypot field that real visitors never fill in, plus a limit of 3 messages per hour per IP address
 - **Safe deletes**: delete operations are POST-only with a confirmation prompt, never plain links
 - **Generic login errors** that do not reveal whether a username exists
 - **Hardened responses**: HttpOnly cookies, hidden ASP.NET/MVC version headers, `X-Content-Type-Options` and `X-Frame-Options` headers
@@ -90,18 +92,26 @@ ResumeProject/
 
 ## Screenshots
 
-<!-- Add screenshots to a docs/ folder, then uncomment this table:
+## Screenshots
 
-| Public Website | Admin Panel |
+| Public Website | Skills Section |
 |---|---|
-| ![Resume](docs/resume.png) | ![Skills admin](docs/skills-admin.png) |
+| ![Resume](docs/resume.png) | ![Skills](docs/skills.png) |
+
+| Admin Panel: Skills | Login Protection |
+|---|---|
+| ![Admin skills](docs/admin-skills.png) | ![Login lockout](docs/login-lockout.png) |
+
+| Contact Form |
+|---|
+| ![Contact form](docs/contact.png) |
 
 -->
 
 ## Roadmap
 
 - [ ] Deploy to Azure App Service with HTTPS enforced
-- [ ] Spam protection and rate limiting for the contact form
+- [ ] Detect the real client IP behind Azure's proxy so the login lockout and contact form limit work per visitor
 - [ ] Unit tests for controllers and repositories
 - [ ] Move configuration secrets to environment variables for production
 

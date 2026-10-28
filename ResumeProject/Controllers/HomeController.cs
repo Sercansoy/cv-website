@@ -96,5 +96,15 @@ namespace ResumeProject.Controllers
             return Redirect(back);
         }
 
+        public ActionResult DownloadCv()
+        {
+            string path = Server.MapPath("~/Content/files/Sercan_Soy_CV_public.pdf");
+
+            if (!System.IO.File.Exists(path))
+                return HttpNotFound();
+
+            return File(path, "application/pdf", "Sercan_Soy_CV_public.pdf");
+        }
+
     }
 }

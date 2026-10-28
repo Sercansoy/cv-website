@@ -26,7 +26,7 @@
 
                 <div class="form-group mb-3">
                     <label class="form-label font-weight-semibold">Link</label>
-                    @Html.TextBoxFor(x => x.Link, new { @class = "form-control", placeholder = "e.g. https://www.linkedin.com/in/username" })
+                    @Html.TextBoxFor(x => x.Link, new { @class = "form-control", maxlength = 50, placeholder = "e.g. https://www.linkedin.com/in/username" })
                     @Html.ValidationMessageFor(x => x.Link, "", new { @class = "text-danger small mt-1 d-block" })
                 </div>
 

@@ -4,6 +4,6 @@
 <div class="social-icons">
     @foreach (var item in Model)
     {
-        <a class="social-icon" href="@item.Link"><i class="@item.Icon"></i></a>
+        <a class="social-icon" href="@item.Link" title="@item.Name" aria-label="@item.Name"><i class="@item.Icon"></i></a>
     }
 </div>
