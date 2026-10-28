@@ -92,8 +92,6 @@ ResumeProject/
 
 ## Screenshots
 
-## Screenshots
-
 | Public Website | Skills Section |
 |---|---|
 | ![Resume](docs/resume.png) | ![Skills](docs/skills.png) |
@@ -105,8 +103,6 @@ ResumeProject/
 | Contact Form |
 |---|
 | ![Contact form](docs/contact.png) |
-
--->
 
 ## Roadmap
 
