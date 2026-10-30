@@ -1,4 +1,5 @@
 # Personal Resume Website with Admin Panel
+**Live demo:** https://sercan-cv-edhfe3afhsezdbfv.swedencentral-01.azurewebsites.net
 
 A dynamic personal resume (CV) website built with **ASP.NET MVC 5**, **Entity Framework 6 (Code First)** and **MS SQL Server**. All content shown on the public page (about, experience, education, skills, interests, certificates, social links) is stored in the database and managed through a secured admin panel, so the site can be updated without touching the code.
 
