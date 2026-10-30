@@ -65,6 +65,15 @@ ResumeProject/
 └── App_Start/        # Routing and bundle configuration
 ```
 
+## Deployment (Azure)
+
+The site runs on **Azure App Service** (Windows, ASP.NET 4.8 runtime) with **Azure SQL Database**.
+
+- The `Context` connection string is set in the App Service environment variables (type: SQLAzure) and is never committed to the repository.
+- `Web.Release.config` enforces secure cookies and custom error pages for release builds.
+- A **GitHub Actions** workflow (`.github/workflows/deploy.yml`) builds the project with MSBuild and deploys it on every push to `main`, using a publish profile stored in GitHub Secrets.
+- Behind Azure's front-end proxy, the client IP is read from the `X-Forwarded-For` header, so login lockout and contact form rate limiting work per visitor.
+
 ## Getting Started
 
 ### Prerequisites
@@ -106,10 +115,12 @@ ResumeProject/
 
 ## Roadmap
 
-- [ ] Deploy to Azure App Service with HTTPS enforced
-- [ ] Detect the real client IP behind Azure's proxy so the login lockout and contact form limit work per visitor
+- [x] Deploy to Azure App Service with HTTPS enforced
+- [x] Spam protection and rate limiting for the contact form
+- [x] Keep configuration secrets out of the repository (Azure connection strings)
+- [x] Automatic deployment with GitHub Actions
 - [ ] Unit tests for controllers and repositories
-- [ ] Move configuration secrets to environment variables for production
+- [ ] Custom domain name
 
 ## Author
 
