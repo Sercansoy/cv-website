@@ -26,6 +26,7 @@ jobs:
           msbuild ResumeProject/ResumeProject.csproj
           /p:Configuration=Release
           /p:DeployOnBuild=true
+          /p:DeployTarget=WebPublish
           /p:WebPublishMethod=FileSystem
           /p:PublishUrl=${{ github.workspace }}\publish
 
