@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ResumeProject.Helpers;
 
 namespace ResumeProject.Controllers
 {
@@ -60,14 +61,14 @@ namespace ResumeProject.Controllers
         {
             string back = Url.Action("Index", "Home") + "#contact";
 
-            if (!string.IsNullOrEmpty(Request.Form["Website"]))
+            if (!string.IsNullOrEmpty(Request.Form["ref_code"]))
             {
                 TempData["FormSuccess"] = "Thank you! Your message has been sent.";
                 return Redirect(back);
             }
 
-            // mesaj atma süresi: aynı ip'den saat başına max mesaj sayısı
-            string key = "contact:" + Request.UserHostAddress;
+            // mesaj atma süresi: ip'den saat başına max mesaj sayısı
+            string key = "contact:" + ClientIp.Get(Request);
             object cached = HttpRuntime.Cache[key];
             int sent = cached is int ? (int)cached : 0;
 
