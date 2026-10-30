@@ -18,9 +18,31 @@ namespace ResumeProject.Controllers
         private const int MaxAttempts = 5;
         private static readonly TimeSpan LockoutTime = TimeSpan.FromMinutes(15);
 
+        private string GetClientIp()
+        {
+            string forwarded = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+
+            if (!string.IsNullOrWhiteSpace(forwarded))
+            {
+                // Azure'un ön sunucusu gerçek IP'yi listenin sonuna ekler
+                string ip = forwarded.Split(',').Last().Trim();
+
+                // "1.2.3.4:5678" biçimindeki IPv4 adreslerinden portu at
+                int colon = ip.LastIndexOf(':');
+                if (colon > -1 && ip.IndexOf(':') == colon)
+                    ip = ip.Substring(0, colon);
+
+                if (!string.IsNullOrEmpty(ip))
+                    return ip;
+            }
+
+            // Yerelde (F5) başlık yoktur, eski yönteme dön
+            return Request.UserHostAddress;
+        }
+
         private string AttemptKey(string user)
         {
-            return "login:" + Request.UserHostAddress + ":" + (user ?? "").Trim().ToLowerInvariant();
+            return "login:" + GetClientIp() + ":" + (user ?? "").Trim().ToLowerInvariant();
         }
 
         private int GetAttempts(string key)
