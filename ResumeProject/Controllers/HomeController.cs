@@ -99,12 +99,12 @@ namespace ResumeProject.Controllers
 
         public ActionResult DownloadCv()
         {
-            string path = Server.MapPath("~/Content/files/Sercan_Soy_CV_public.pdf");
+            string path = Server.MapPath("~/Content/files/Sercan_Soy_CV_web.pdf");
 
             if (!System.IO.File.Exists(path))
                 return HttpNotFound();
 
-            return File(path, "application/pdf", "Sercan_Soy_CV_public.pdf");
+            return File(path, "application/pdf", "Sercan_Soy_CV_web.pdf");
         }
 
     }
